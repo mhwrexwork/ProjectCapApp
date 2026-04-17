@@ -1,6 +1,6 @@
+tensorflow
 numpy
 streamlit
 pathlib
-tensorflow
 keras
 matplotlib
