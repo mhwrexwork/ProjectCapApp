@@ -2,5 +2,3 @@ numpy
 streamlit
 pathlib
 keras
-layers
-ops
