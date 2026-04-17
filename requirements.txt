@@ -1,5 +1,10 @@
 os
 numpy
 matplotlib.pyplot
+streamlit
+pathlib
+collections
 tensorflow
-kagglehub
+keras
+layers
+ops
