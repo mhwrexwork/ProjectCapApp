@@ -2,4 +2,4 @@ numpy
 streamlit
 pathlib
 keras
-matplotlib.pyplot
+matplotlib
