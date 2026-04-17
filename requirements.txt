@@ -1,7 +1,6 @@
 numpy
 streamlit
 pathlib
-collections
 tensorflow
 keras
 layers
