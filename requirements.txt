@@ -3,4 +3,5 @@ numpy
 streamlit
 pathlib
 keras
+ops
 matplotlib
