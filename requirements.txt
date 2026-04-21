@@ -2,7 +2,7 @@ tensorflow==2.19.0
 numpy
 streamlit
 pathlib
-keras
+keras==3.0.0
 ops
 layers
 kagglehub
