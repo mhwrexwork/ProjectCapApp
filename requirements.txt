@@ -3,6 +3,7 @@ numpy
 streamlit
 pathlib
 keras==3.0.5
+h5py>=3.10.0
 ops
 layers
 kagglehub
