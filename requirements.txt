@@ -4,5 +4,7 @@ streamlit
 pathlib
 keras
 ops
+layers
 kagglehub
 matplotlib
+PIL
