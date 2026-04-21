@@ -53,7 +53,7 @@ def decode_batch_predictions(pred):
 @st.cache_resource
 def load_model():
     model = keras.models.load_model(
-        "model1.keras", custom_objects={'CTCLayer': CTCLayer}
+        "clean_model.keras", custom_objects={'CTCLayer': CTCLayer}
     )
     # Create a prediction model from the loaded full model
     prediction_model = keras.models.Model(
