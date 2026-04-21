@@ -46,17 +46,64 @@ def decode_batch_predictions(pred):
         output_text.append(tf.strings.reduce_join(num_to_char(res)).numpy().decode("utf-8"))
     return output_text
 
-# --- Load the Model ---
+# --- Model Architecture (rebuilt for prediction) ---
+def build_prediction_model_architecture():
+    input_img = layers.Input(
+        shape=(img_width, img_height, 1), name= "image", dtype="float32"
+    )
+
+    x = layers.Conv2D(
+        32,
+        (3, 3),
+        activation = "relu",
+        kernel_initializer="he_normal",
+        padding="same",
+        name="Conv1"
+    )(input_img)
+    x = layers.BatchNormalization()(x)
+    x = layers.MaxPooling2D((2, 2), name="pool1")(x)
+
+    x = layers.Conv2D(
+        64,
+        (3, 3),
+        activation = "relu",
+        kernel_initializer="he_normal",
+        padding="same",
+        name="Conv2"
+    )(x)
+    x = layers.BatchNormalization()(x)
+    x = layers.MaxPooling2D((2, 2), name="pool2")(x)
+
+    new_shape = ((img_width // downsample_factor), (img_height // downsample_factor) * 64)
+    x = layers.Reshape(target_shape=new_shape, name="reshape")(x)
+    x = layers.Dense(64, activation="relu", name="dense1")(x)
+    x = layers.BatchNormalization()(x)
+    x = layers.Dropout(0.2)(x)
+
+    x = layers.Bidirectional(layers.LSTM(128, return_sequences=True, dropout=0.25))(x)
+    x = layers.Bidirectional(layers.LSTM(64, return_sequences=True, dropout=0.25))(x)
+
+    num_classes = char_to_num.vocabulary_size() + 1
+    output_dense2 = layers.Dense(num_classes, activation="softmax", name="dense2")(x)
+
+    # The prediction model only needs the image input and the final dense layer output
+    prediction_model = keras.models.Model(inputs=input_img, outputs=output_dense2)
+    return prediction_model
+
+# --- Load the Model (and its weights) ---
 @st.cache_resource
 def load_model():
-    model = keras.models.load_model(
-        "clean_model.keras", custom_objects={'CTCLayer': CTCLayer}
+    # 1. Build the prediction model architecture
+    prediction_model = build_prediction_model_architecture()
+
+    # 2. Load the weights from the saved model file
+    # We first load the full model (which includes CTCLayer) to get the weights correctly
+    # and then apply those weights to our prediction_model_architecture
+    full_saved_model = keras.models.load_model(
+        "clean_model.keras", custom_objects={'CTCLayer': CTCLayer}, compile=False
     )
-    # Create a prediction model from the loaded full model
-    prediction_model = keras.models.Model(
-        inputs=model.get_layer(name="image").output, # Changed to .output to get the KerasTensor
-        outputs=model.get_layer(name="dense2").output
-    )
+    prediction_model.set_weights(full_saved_model.get_weights())
+
     return prediction_model
 
 prediction_model = load_model()
