@@ -7,6 +7,8 @@ import numpy as np
 from PIL import Image
 import io
 
+pip install --upgrade keras
+
 # --- Configuration Parameters (from notebook) ---
 characters = sorted(['D', 't', 'e', 'G', 'n', 'W', 'w', 'm', 'h', 'z', 'o', 'V', '6', 'J', 'v', '9', 's', 'H', 'Q', 'S', '5', 'i', 'C', 'f', 'u', 'B', 'g', 'd', 'q', 'j', 'l', 'Y', 'r', '3', '2', 'T', '8', '0', '1', 'P', 'X', 'c', 'b', 'Z', 'U', 'a', 'x', 'N', 'k', 'F', 'O', 'I', 'p', '7', 'E', 'L', 'K', 'R', 'y', '4', 'A', 'M'])
 img_width = 200
