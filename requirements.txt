@@ -7,4 +7,3 @@ ops
 layers
 kagglehub
 matplotlib
-PIL
